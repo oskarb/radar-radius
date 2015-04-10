@@ -254,6 +254,11 @@ Public Class RADIUSAttribute
         If mValue(0) <> 0 Then Return CiscoAVPairType.Invalid
         Return mValue(4)
     End Function
+
+    Public Function GetVendorSpecific() As VendorSpecificAttribute
+        Return New VendorSpecificAttribute(mValue)
+    End Function
+
 End Class
 
 Public Enum RadiusAttributeType As Byte
