@@ -18,6 +18,7 @@ Imports System.Security.Cryptography
 Imports RADAR.Conversion
 
 Public Class RADIUSPacket
+
     Private mCode As RadiusPacketCode
     Private mIdentifier As Byte
     Private mAuthenticator() As Byte = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
@@ -25,6 +26,26 @@ Public Class RADIUSPacket
     Private mEndPoint As IPEndPoint
     Private mIsValid As Boolean
     Private mServer As RADIUSServer
+
+    'TODO: Clean up all these constructors
+
+    Public Sub New(ByVal code As RadiusPacketCode, ByVal identifier As Byte, ByVal attributes As RADIUSAttributes, authenticator As Byte())
+        mCode = code
+        mIdentifier = identifier
+        If attributes Is Nothing Then
+            mAttributes = New RADIUSAttributes
+        Else
+            mAttributes = attributes
+        End If
+
+        mAuthenticator = authenticator
+        'If endPoint Is Nothing Then
+        '    mIsValid = False
+        'Else
+        '    mEndPoint = endPoint
+        '    mIsValid = True
+        'End If
+    End Sub
 
     Friend Sub New(ByRef data() As Byte, ByVal endPoint As IPEndPoint, ByRef server As RADIUSServer)
         'Check validity ...
@@ -35,6 +56,18 @@ Public Class RADIUSPacket
             Array.Copy(data, 4, mAuthenticator, 0, 16)
             mEndPoint = endPoint
             mServer = server
+        End If
+    End Sub
+
+    Friend Sub New(ByRef data() As Byte)
+        'Check validity ...
+        mIsValid = mAttributes.LoadAttributes(data)
+        If mIsValid Then
+            mCode = data(0)
+            mIdentifier = data(1)
+            Array.Copy(data, 4, mAuthenticator, 0, 16)
+            '   mEndPoint = endPoint
+
         End If
     End Sub
 

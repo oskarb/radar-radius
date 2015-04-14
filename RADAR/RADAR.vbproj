@@ -90,6 +90,9 @@
     <Compile Include="RADIUSAttributes.vb" />
     <Compile Include="RADIUSPacket.vb" />
     <Compile Include="RADIUSServer.vb" />
+    <Compile Include="RADIUSClient.vb" />
+    <Compile Include="RADIUSClientCrypto.vb" />
+    <Compile Include="RADIUSClientUtils.vb" />
     <Compile Include="UDPServer.vb" />
     <Compile Include="VendorSpefic.vb" />
     <Compile Include="VSA.vb" />
