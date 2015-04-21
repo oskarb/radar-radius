@@ -7,6 +7,9 @@ Imports System.Net
 Imports System.Reflection
 Imports System.IO.Path
 Imports System.IO.Directory
+Imports System.Web.Helpers
+
+
 
 
 Public Class RADIUSClient
@@ -50,7 +53,11 @@ Public Class RADIUSClient
     End Property
 
     Public Function Authenticate(Username As String, Password As String, pAttributes As RADIUSAttributes) As RADIUSPacket
-        DebugOutput("Authenticate: " & " Username: " & Username)
+        DebugOutput("AccessRequest: " & " Username: " & Username)
+
+        For Each a In pAttributes
+            DebugOutput("Type: " & a.Type.ToString & " Value: " & a.Value.Length)
+        Next
 
         Dim pRandonNumber As New Random()
 
@@ -75,14 +82,11 @@ Public Class RADIUSClient
 
         For i As Integer = 0 To 10
             Threading.Thread.Sleep(20)
-
             Try
-                DebugOutput("Sending data to radius server" & Encoding.Default.GetString(request.Bytes))
-
                 Dim RemoteIpEndPoint As New IPEndPoint(IPAddress.Any, 0)
                 Dim receiveBytes As [Byte]() = udpClient.Receive(RemoteIpEndPoint)
-                DebugOutput("Receive data to radius server" & Encoding.Default.GetString(receiveBytes))
                 Dim response = New RADIUSPacket(receiveBytes)
+                DebugOutput("Response:" & response.Code.ToString)
                 Return response
             Catch e As Exception
                 DebugOutput("Exception Error: " + e.ToString())
@@ -102,10 +106,8 @@ Public Class RADIUSClient
 
     End Sub
 
-
     Private Sub DebugOutput(Output As String)
         If pDebug Then
-
             Dim assemblyPath As String = (New System.Uri(Assembly.GetExecutingAssembly().CodeBase)).AbsolutePath
             Dim logPath As String = GetParent(GetDirectoryName(assemblyPath)).FullName & "\log\Radius_Debug.txt"
             Dim log As New StreamWriter(logPath, True)
@@ -114,9 +116,6 @@ Public Class RADIUSClient
         End If
 
     End Sub
-
-
-
 
 End Class
 
