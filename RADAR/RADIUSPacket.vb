@@ -270,6 +270,14 @@ Public Class RADIUSPacket
         mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessReject, mIdentifier, Nothing, mEndPoint), mAuthenticator)
     End Sub
 
+    Public Sub RejectAccessRequest(reason As String)
+        If mCode <> RadiusPacketCode.AccessRequest Then Exit Sub
+        Dim attributes As New RADIUSAttributes
+        Dim replyMessage = New RADIUSAttribute(RadiusAttributeType.ReplyMessage, reason)
+        attributes.Add(replyMessage)
+        mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessReject, mIdentifier, attributes, mEndPoint), mAuthenticator)
+    End Sub
+
     Public Sub SendAccessChallange(ByVal attributes As RADIUSAttributes)
         mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessChallenge, mIdentifier, attributes, mEndPoint), mAuthenticator)
     End Sub
