@@ -105,7 +105,7 @@ Public Class RADIUSClient
     Private Sub DebugOutput(Output As String)
         If pDebug Then
             Dim assemblyPath As String = (New System.Uri(Assembly.GetExecutingAssembly().CodeBase)).AbsolutePath
-            Dim logPath As String = GetParent(GetDirectoryName(assemblyPath)).FullName & "\log\Radius_Debug.txt"
+            Dim logPath As String = GetParent(GetDirectoryName(assemblyPath)).FullName & "\log\radius_client.txt"
             Dim log As New StreamWriter(logPath, True)
             log.WriteLine(Now.ToString & ": " & "[DEBUG] " + Output)
             log.Close()
