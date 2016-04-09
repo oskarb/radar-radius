@@ -278,7 +278,12 @@ Public Class RADIUSPacket
         mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessReject, mIdentifier, attributes, mEndPoint), mAuthenticator)
     End Sub
 
+    <Obsolete("Use SendAccessChallenge instead.")>
     Public Sub SendAccessChallange(ByVal attributes As RADIUSAttributes)
+        SendAccessChallenge(attributes)
+    End Sub
+
+    Public Sub SendAccessChallenge(ByVal attributes As RADIUSAttributes)
         mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessChallenge, mIdentifier, attributes, mEndPoint), mAuthenticator)
     End Sub
 
