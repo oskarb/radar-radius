@@ -6,6 +6,8 @@ This is a small RADIUS server implementation written in VB.NET. It is almost RFC
 ## History
 This RADIUS server implementation came into being back in early 2008 after an unsuccessful search for a simple and inexpensive, yet flexible RADIUS server (or .NET RADIUS library, for that matter) with VoIP call accounting and authorization handling for Cisco IOS routers in mind.
 
+The version available at https://github.com/oskarb/radar-radius is a forked version from 2016, with some minor updates since upstream is no longer actively maintaining the project.
+
 ## Structure
 At large, the project includes several modules:
 
@@ -15,7 +17,7 @@ At large, the project includes several modules:
 * WebUI module -- Web interface allowing for the configuration of the CalLogic and BilLogic modules as well as presenting call reports.
 
 ## Dependencies
-The code targets version 3.5 of the Microsoft .NET Framework and loads in Visual Studio 2008 (though it should be able to load into Visual Studio 2005 with some tweaking).
+The code targets version 4.5 of the Microsoft .NET Framework and loads in Visual Studio 2015.
 
 ## Contact
 Please direct questions and comments to Nikolay Semov.
