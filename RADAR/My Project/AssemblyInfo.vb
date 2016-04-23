@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("RADAR RADIUS")> 
-<Assembly: AssemblyCopyright("Copyright ©  2008-2011")> 
+<Assembly: AssemblyCopyright("Copyright © Various 2008-2016")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
