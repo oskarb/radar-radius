@@ -258,7 +258,14 @@ Public Class RADIUSPacket
     ''' <remarks></remarks>
     Public Sub AcceptAccessRequest(ByVal attributes As RADIUSAttributes)
         If mCode <> RadiusPacketCode.AccessRequest Then Exit Sub
-        mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessAccept, mIdentifier, attributes, mEndPoint), mAuthenticator)
+
+        ' RFC2865, section 5.33, Proxy-State attributes must be sent pack, in the same order.
+        Dim responseAttributes = GetProxyStateAttributes()
+        If (Not attributes Is Nothing)
+            responseAttributes.AddRange(attributes)
+        End If
+
+        mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessAccept, mIdentifier, responseAttributes, mEndPoint), mAuthenticator)
     End Sub
 
     ''' <summary>
@@ -267,15 +274,23 @@ Public Class RADIUSPacket
     ''' <remarks></remarks>
     Public Sub RejectAccessRequest()
         If mCode <> RadiusPacketCode.AccessRequest Then Exit Sub
-        mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessReject, mIdentifier, Nothing, mEndPoint), mAuthenticator)
+
+        ' RFC2865, section 5.33, Proxy-State attributes must be sent pack, in the same order.
+        Dim responseAttributes = GetProxyStateAttributes()
+
+        mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessReject, mIdentifier, responseAttributes, mEndPoint), mAuthenticator)
     End Sub
 
     Public Sub RejectAccessRequest(reason As String)
         If mCode <> RadiusPacketCode.AccessRequest Then Exit Sub
-        Dim attributes As New RADIUSAttributes
+
+        ' RFC2865, section 5.33, Proxy-State attributes must be sent pack, in the same order.
+        Dim responseAttributes = GetProxyStateAttributes()
+
         Dim replyMessage = New RADIUSAttribute(RadiusAttributeType.ReplyMessage, reason)
-        attributes.Add(replyMessage)
-        mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessReject, mIdentifier, attributes, mEndPoint), mAuthenticator)
+        responseAttributes.Add(replyMessage)
+
+        mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessReject, mIdentifier, responseAttributes, mEndPoint), mAuthenticator)
     End Sub
 
     <Obsolete("Use SendAccessChallenge instead.")>
@@ -284,8 +299,18 @@ Public Class RADIUSPacket
     End Sub
 
     Public Sub SendAccessChallenge(ByVal attributes As RADIUSAttributes)
-        mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessChallenge, mIdentifier, attributes, mEndPoint), mAuthenticator)
+        ' RFC2865, section 5.33, Proxy-State attributes must be sent pack, in the same order.
+        Dim responseAttributes = GetProxyStateAttributes()
+        If (Not attributes Is Nothing)
+            responseAttributes.AddRange(attributes)
+        End If
+
+        mServer.SendAsResponse(New RADIUSPacket(RadiusPacketCode.AccessChallenge, mIdentifier, responseAttributes, mEndPoint), mAuthenticator)
     End Sub
+
+    Private Function GetProxyStateAttributes() As RADIUSAttributes
+        Return Attributes.GetAllAttributes(RadiusAttributeType.ProxyState)
+    End Function
 
     Private Function XorBytes(ByVal oper1() As Byte, ByVal oper2() As Byte) As Byte()
         Dim res() As Byte = {}
