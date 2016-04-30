@@ -316,4 +316,6 @@ Public Enum RadiusAttributeType As Byte
     NASPortType = 61
     PortLimit = 62
     LoginLATPort = 63
+    ''' RFC2869
+    MessageAuthenticator = 80
 End Enum
